@@ -1,0 +1,76 @@
+<div class="container py-4">
+  <div class="d-flex justify-content-between align-items-start mb-3 flex-wrap gap-2">
+    <div>
+      <h1 class="mb-1"><%= @launch_context.product_name %></h1>
+      <p class="text-muted mb-1">Target audience: <%= @launch_context.target_audience %></p>
+      <div>
+        <%= render "shared/growth_challenge_badge", challenge: @launch_context.growth_challenge %>
+      </div>
+    </div>
+    <div class="d-flex gap-2">
+      <%= link_to "← My Backlogs", launch_contexts_path, class: "btn btn-outline-secondary btn-sm" %>
+      <%= link_to "New Backlog", new_launch_context_path, class: "btn btn-sm",
+            style: "background-color: var(--accent); color: white;" %>
+    </div>
+  </div>
+
+  <p class="text-muted small fst-italic mb-3">AI-generated suggestions. Review and adapt before running.</p>
+
+  <% if @experiments.empty? %>
+    <div class="alert alert-info">No experiments found for this backlog.</div>
+  <% else %>
+    <div class="table-responsive">
+      <table class="table table-hover table-dark align-middle">
+        <thead>
+          <tr>
+            <th><%= sort_link "name",       "Experiment",  @sort_col, @sort_dir %></th>
+            <th><%= sort_link "channel",    "Channel",     @sort_col, @sort_dir %></th>
+            <th class="text-center"><%= sort_link "impact",     "Impact",     @sort_col, @sort_dir %></th>
+            <th class="text-center"><%= sort_link "confidence", "Confidence", @sort_col, @sort_dir %></th>
+            <th class="text-center"><%= sort_link "effort",     "Effort",     @sort_col, @sort_dir %></th>
+            <th class="text-center ice-total-column"><%= sort_link "ice_total", "ICE", @sort_col, @sort_dir %></th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @experiments.each do |exp| %>
+            <tr class="<%= 'experiment-row--active' if exp.status == 'active' %>"
+                data-controller="row-expand">
+              <td data-action="click->row-expand#toggle" style="cursor: pointer;">
+                <div class="fw-semibold" data-row-expand-target="preview"><%= truncate(exp.name, length: 50) %></div>
+                <div data-row-expand-target="full">
+                  <div class="fw-semibold"><%= exp.name %></div>
+                  <div class="text-muted small mt-1"><%= exp.hypothesis %></div>
+                  <% if exp.execution_note.present? %>
+                    <div class="text-info small mt-1"><strong>Next step:</strong> <%= exp.execution_note %></div>
+                  <% end %>
+                </div>
+              </td>
+              <td><span class="badge bg-dark border border-secondary"><%= exp.channel %></span></td>
+              <td class="text-center"><%= render "shared/ice_badge", score: exp.impact %></td>
+              <td class="text-center"><%= render "shared/ice_badge", score: exp.confidence %></td>
+              <td class="text-center"><%= render "shared/ice_badge", score: exp.effort %></td>
+              <td class="text-center ice-total-column">
+                <strong><%= exp.ice_total %></strong>
+              </td>
+              <td id="<%= dom_id(exp, :status_cell) %>">
+                <%= render "growth_experiments/status_dropdown", experiment: exp %>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  <% end %>
+
+  <% if @raw_response.present? %>
+    <div class="mt-4">
+      <a class="btn btn-outline-secondary btn-sm" data-bs-toggle="collapse" href="#raw-response">
+        Show raw Gemini response
+      </a>
+      <div class="collapse mt-2" id="raw-response">
+        <pre class="bg-dark border border-secondary rounded p-3 small text-muted" style="max-height: 400px; overflow-y: auto; white-space: pre-wrap; word-break: break-word;"><%= JSON.pretty_generate(JSON.parse(@raw_response)) rescue @raw_response %></pre>
+      </div>
+    </div>
+  <% end %>
+</div>

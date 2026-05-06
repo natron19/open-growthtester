@@ -1,0 +1,131 @@
+<div class="container py-5">
+  <!-- Hero -->
+  <div class="row align-items-center mb-5 g-4">
+    <div class="col-lg-6">
+      <h1 class="display-5 fw-bold mb-3"><%= ENV.fetch("APP_NAME", "GrowthTester Demo") %></h1>
+      <p class="lead text-muted mb-3"><%= ENV.fetch("APP_TAGLINE", "Describe your product launch. Get a prioritized growth experiment backlog.") %></p>
+      <p class="text-muted"><%= ENV.fetch("APP_DESCRIPTION", "Enter your product, audience, and biggest growth challenge. Get a scored, sortable backlog of 8-10 actionable growth experiments in seconds.") %></p>
+      <div class="mt-4">
+        <% if signed_in? %>
+          <%= link_to "Generate My Backlog →", new_launch_context_path, class: "btn btn-lg",
+                style: "background-color: var(--accent); color: white;" %>
+        <% else %>
+          <%= link_to "Sign up free", sign_up_path, class: "btn btn-lg me-2",
+                style: "background-color: var(--accent); color: white;" %>
+          <%= link_to "Sign in", sign_in_path, class: "btn btn-outline-secondary btn-lg" %>
+        <% end %>
+      </div>
+    </div>
+    <div class="col-lg-6">
+      <div class="card border-secondary">
+        <div class="card-header text-muted small">Sample ICE-scored backlog</div>
+        <div class="card-body p-0">
+          <table class="table table-dark table-sm mb-0">
+            <thead>
+              <tr class="text-muted small">
+                <th class="ps-3">Experiment</th>
+                <th class="text-center">Channel</th>
+                <th class="text-center">ICE</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="ps-3 small">Founder-led Twitter Thread</td>
+                <td class="text-center"><span class="badge bg-dark border border-secondary">Content</span></td>
+                <td class="text-center fw-bold">11</td>
+              </tr>
+              <tr>
+                <td class="ps-3 small">ProductHunt Launch</td>
+                <td class="text-center"><span class="badge bg-dark border border-secondary">PR</span></td>
+                <td class="text-center fw-bold">10</td>
+              </tr>
+              <tr>
+                <td class="ps-3 small">SEO Docs for Boilerplate Queries</td>
+                <td class="text-center"><span class="badge bg-dark border border-secondary">SEO</span></td>
+                <td class="text-center fw-bold">9</td>
+              </tr>
+              <tr>
+                <td class="ps-3 small">Reddit r/rails AMA</td>
+                <td class="text-center"><span class="badge bg-dark border border-secondary">Community</span></td>
+                <td class="text-center fw-bold">9</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- How it works -->
+  <div class="row mb-5">
+    <div class="col-12 mb-3">
+      <h2 class="h4">How it works</h2>
+    </div>
+    <div class="col-md-4 mb-3">
+      <div class="d-flex gap-3">
+        <span class="fw-bold fs-4" style="color: var(--accent);">1</span>
+        <div>
+          <strong>Describe your product</strong>
+          <p class="text-muted small mb-0">Name your product, describe what it does, and identify your target audience.</p>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4 mb-3">
+      <div class="d-flex gap-3">
+        <span class="fw-bold fs-4" style="color: var(--accent);">2</span>
+        <div>
+          <strong>Pick your growth challenge</strong>
+          <p class="text-muted small mb-0">Choose the area where you're most stuck: awareness, conversion, retention, or referral.</p>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4 mb-3">
+      <div class="d-flex gap-3">
+        <span class="fw-bold fs-4" style="color: var(--accent);">3</span>
+        <div>
+          <strong>Get your backlog</strong>
+          <p class="text-muted small mb-0">Receive 8–10 scored experiments with hypotheses, channels, and a first concrete step.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Growth challenge cards -->
+  <div class="row g-3">
+    <div class="col-12 mb-2">
+      <h2 class="h4">Growth challenges we cover</h2>
+    </div>
+    <div class="col-md-3">
+      <div class="card border-info h-100">
+        <div class="card-body">
+          <span class="badge bg-info text-dark mb-2">Awareness</span>
+          <p class="card-text text-muted small">People don't know your product exists. Experiments focus on content, SEO, PR, and community channels.</p>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card border-primary h-100">
+        <div class="card-body">
+          <span class="badge bg-primary mb-2">Conversion</span>
+          <p class="card-text text-muted small">Visitors don't become users. Experiments focus on onboarding, landing pages, pricing, and product-led hooks.</p>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card border-success h-100">
+        <div class="card-body">
+          <span class="badge bg-success mb-2">Retention</span>
+          <p class="card-text text-muted small">Users don't stick around. Experiments focus on activation, engagement loops, notifications, and habit-forming flows.</p>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card border-warning h-100">
+        <div class="card-body">
+          <span class="badge bg-warning text-dark mb-2">Referral</span>
+          <p class="card-text text-muted small">Users don't invite others. Experiments focus on share mechanics, referral programs, and word-of-mouth triggers.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

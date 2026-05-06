@@ -1,0 +1,57 @@
+<% recent_context = current_user.launch_contexts.order(created_at: :desc).first %>
+<% past_contexts  = current_user.launch_contexts.order(created_at: :desc).limit(5) %>
+
+<% if recent_context.nil? %>
+  <div class="row justify-content-center">
+    <div class="col-lg-6">
+      <div class="card border-secondary text-center py-5">
+        <div class="card-body">
+          <h5 class="card-title mb-2">No backlogs yet</h5>
+          <p class="text-muted">Describe your product and we'll generate a prioritized growth experiment backlog in seconds.</p>
+          <%= link_to "Generate My First Backlog →", new_launch_context_path, class: "btn mt-2",
+                style: "background-color: var(--accent); color: white;" %>
+        </div>
+      </div>
+    </div>
+  </div>
+<% else %>
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h1 class="mb-0">Dashboard</h1>
+    <%= link_to "New Backlog", new_launch_context_path, class: "btn",
+          style: "background-color: var(--accent); color: white;" %>
+  </div>
+
+  <div class="card border-secondary mb-4">
+    <div class="card-body">
+      <div class="d-flex justify-content-between align-items-start">
+        <div>
+          <h5 class="card-title mb-1"><%= link_to recent_context.product_name, launch_context_path(recent_context), class: "text-white text-decoration-none" %></h5>
+          <p class="text-muted small mb-2">Created <%= recent_context.created_at.strftime("%B %-d, %Y") %></p>
+          <div>
+            <%= render "shared/growth_challenge_badge", challenge: recent_context.growth_challenge %>
+            <span class="text-muted small ms-2"><%= recent_context.growth_experiments.count %> experiments</span>
+          </div>
+        </div>
+        <%= link_to "View →", launch_context_path(recent_context), class: "btn btn-outline-secondary btn-sm" %>
+      </div>
+    </div>
+  </div>
+
+  <% if past_contexts.count > 1 %>
+    <h6 class="text-muted mb-2">Recent backlogs</h6>
+    <ul class="list-group list-group-flush">
+      <% past_contexts.each do |lc| %>
+        <li class="list-group-item bg-transparent border-secondary d-flex justify-content-between align-items-center">
+          <%= link_to lc.product_name, launch_context_path(lc), class: "text-white text-decoration-none" %>
+          <div class="d-flex align-items-center gap-2">
+            <%= render "shared/growth_challenge_badge", challenge: lc.growth_challenge %>
+            <span class="text-muted small"><%= lc.created_at.strftime("%b %-d") %></span>
+          </div>
+        </li>
+      <% end %>
+    </ul>
+    <div class="mt-3">
+      <%= link_to "View all backlogs →", launch_contexts_path, class: "text-muted small text-decoration-none" %>
+    </div>
+  <% end %>
+<% end %>

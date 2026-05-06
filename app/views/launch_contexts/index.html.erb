@@ -1,0 +1,45 @@
+<div class="container py-4">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h1 class="mb-0">My Backlogs</h1>
+    <%= link_to "New Backlog", new_launch_context_path, class: "btn",
+          style: "background-color: var(--accent); color: white;" %>
+  </div>
+
+  <% if @launch_contexts.empty? %>
+    <div class="card border-secondary text-center py-5">
+      <div class="card-body">
+        <h5 class="card-title text-muted">No backlogs yet</h5>
+        <p class="card-text text-muted">Generate your first growth experiment backlog to get started.</p>
+        <%= link_to "Generate My First Backlog →", new_launch_context_path, class: "btn mt-2",
+              style: "background-color: var(--accent); color: white;" %>
+      </div>
+    </div>
+  <% else %>
+    <table class="table table-hover table-dark align-middle">
+      <thead>
+        <tr>
+          <th>Product</th>
+          <th>Challenge</th>
+          <th class="text-center">Experiments</th>
+          <th>Created</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @launch_contexts.each do |lc| %>
+          <tr>
+            <td><%= link_to lc.product_name, launch_context_path(lc), class: "text-white fw-semibold text-decoration-none" %></td>
+            <td><%= render "shared/growth_challenge_badge", challenge: lc.growth_challenge %></td>
+            <td class="text-center"><%= lc.growth_experiments.count %></td>
+            <td class="text-muted small"><%= lc.created_at.strftime("%b %-d, %Y") %></td>
+            <td class="text-end">
+              <%= button_to "Delete", launch_context_path(lc), method: :delete,
+                    class: "btn btn-sm btn-outline-danger",
+                    data: { turbo_confirm: "Delete this backlog and all its experiments?" } %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  <% end %>
+</div>

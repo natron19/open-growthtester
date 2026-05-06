@@ -1,0 +1,18 @@
+<div class="dropdown">
+  <button class="btn btn-sm dropdown-toggle <%= experiment.status == 'active' ? 'btn-primary' : experiment.status == 'complete' ? 'btn-success' : 'btn-outline-secondary' %>"
+          type="button" data-bs-toggle="dropdown">
+    <%= experiment.status.capitalize %>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-dark">
+    <% GrowthExperiment::STATUSES.each do |s| %>
+      <li>
+        <%= button_to s.capitalize,
+              update_status_growth_experiment_path(experiment),
+              method: :patch,
+              params: { status: s },
+              class: "dropdown-item #{'active' if experiment.status == s}",
+              form: { data: { turbo_stream: true } } %>
+      </li>
+    <% end %>
+  </ul>
+</div>

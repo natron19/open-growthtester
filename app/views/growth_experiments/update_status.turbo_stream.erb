@@ -1,0 +1,3 @@
+<%= turbo_stream.update dom_id(@experiment, :status_cell) do %>
+  <%= render "status_dropdown", experiment: @experiment %>
+<% end %>

@@ -1,0 +1,82 @@
+<div class="container py-4">
+  <div class="row justify-content-center">
+    <div class="col-lg-7">
+      <h1 class="mb-1">Generate Growth Backlog</h1>
+      <p class="text-muted mb-4">Describe your product and we'll generate a scored, prioritized growth experiment backlog in 5–10 seconds.</p>
+
+      <%= form_with model: @launch_context, class: "needs-validation",
+            data: { controller: "generation-form",
+                    action: "submit->generation-form#start",
+                    generation_form_cancel_url_value: launch_contexts_path } do |f| %>
+        <% if @launch_context.errors.any? %>
+          <div class="alert alert-danger">
+            <ul class="mb-0">
+              <% @launch_context.errors.full_messages.each do |msg| %>
+                <li><%= msg %></li>
+              <% end %>
+            </ul>
+          </div>
+        <% end %>
+
+        <div class="mb-3">
+          <%= f.label :product_name, "Product Name", class: "form-label" %>
+          <%= f.text_field :product_name, class: "form-control", placeholder: "e.g. ShipFast CLI", required: true %>
+        </div>
+
+        <div class="mb-3" data-controller="character-count" data-character-count-max-value="1000">
+          <%= f.label :description, "Product Description", class: "form-label" %>
+          <%= f.text_area :description, class: "form-control", rows: 5,
+                placeholder: "What does your product do? Who uses it? What problem does it solve?",
+                required: true,
+                data: { character_count_target: "input", action: "input->character-count#update" } %>
+          <div class="form-text" data-character-count-target="counter">1000 characters remaining</div>
+        </div>
+
+        <div class="mb-3">
+          <%= f.label :target_audience, "Target Audience", class: "form-label" %>
+          <%= f.text_field :target_audience, class: "form-control",
+                placeholder: "e.g. Solo Rails developers building their first SaaS", required: true %>
+        </div>
+
+        <div class="mb-4" data-controller="challenge-toggle">
+          <label class="form-label d-block">Biggest Growth Challenge</label>
+          <%= f.hidden_field :growth_challenge, value: @launch_context.growth_challenge.to_s,
+                data: { challenge_toggle_target: "input" } %>
+          <div class="btn-group w-100" role="group">
+            <% LaunchContext::GROWTH_CHALLENGES.each do |challenge| %>
+              <button type="button"
+                      class="btn btn-outline-secondary <%= 'active' if @launch_context.growth_challenge == challenge %>"
+                      data-challenge-toggle-target="button"
+                      data-value="<%= challenge %>"
+                      data-action="click->challenge-toggle#select">
+                <%= challenge.capitalize %>
+              </button>
+            <% end %>
+          </div>
+        </div>
+
+        <div data-generation-form-target="submitBtn">
+          <div class="d-grid">
+            <%= f.submit "Generate My Backlog →",
+                  class: "btn btn-lg",
+                  style: "background-color: var(--accent); color: white;" %>
+          </div>
+          <p class="text-muted text-center mt-2 small">This usually takes 20–40 seconds while the AI generates your backlog.</p>
+        </div>
+
+        <div data-generation-form-target="loadingState" hidden>
+          <div class="d-grid mb-2">
+            <button type="button" class="btn btn-lg btn-outline-secondary"
+                    data-action="click->generation-form#cancel">
+              Cancel
+            </button>
+          </div>
+          <div class="text-center text-muted mt-2">
+            <span class="spinner-border spinner-border-sm me-2" role="status"></span>
+            Generating your backlog — this takes 20–40 seconds…
+          </div>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>
