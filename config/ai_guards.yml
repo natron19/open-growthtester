@@ -1,0 +1,17 @@
+# Per-app guardrail configuration, read by AiGuardConfig.
+# See docs/ai-guardrails.md (Layer 1b: AiOutputGuard) and docs/ai-evals.md.
+
+# Product briefs and growth challenges are not a personal-distress context.
+crisis_terms: []
+
+# Output structure rules per AiTemplate name.
+#   format:        text | json
+#   required_keys: top-level keys the JSON object must contain
+templates:
+  health_ping:
+    format: text
+  # LaunchContextsController#create does JSON.parse(raw)["experiments"] and
+  # treats a missing key as a parse failure.
+  growthtester_backlog_v1:
+    format: json
+    required_keys: [experiments]

@@ -87,9 +87,9 @@ RSpec.describe "LaunchContexts", type: :request do
           .not_to change(GrowthExperiment, :count)
       end
 
-      it "returns a response" do
+      it "renders the error page with 422 so Turbo displays it" do
         post launch_contexts_path, params: valid_params
-        expect(response).to have_http_status(:ok)
+        expect(response).to have_http_status(:unprocessable_entity)
       end
     end
 

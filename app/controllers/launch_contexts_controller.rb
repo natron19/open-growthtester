@@ -82,19 +82,19 @@ class LaunchContextsController < ApplicationController
 
   rescue GeminiService::BudgetExceededError
     @launch_context.destroy
-    render partial: "shared/ai_error", locals: { error_type: :budget_exceeded }
+    render "shared/ai_error_page", locals: { error_type: :budget_exceeded }, status: :unprocessable_entity
 
   rescue GeminiService::GatekeeperError
     @launch_context.destroy
-    render partial: "shared/ai_error", locals: { error_type: :gatekeeper_blocked }
+    render "shared/ai_error_page", locals: { error_type: :gatekeeper_blocked }, status: :unprocessable_entity
 
   rescue GeminiService::TimeoutError
     @launch_context.destroy
-    render partial: "shared/ai_error", locals: { error_type: :timeout }
+    render "shared/ai_error_page", locals: { error_type: :timeout }, status: :unprocessable_entity
 
   rescue GeminiService::GeminiError
     @launch_context.destroy
-    render partial: "shared/ai_error", locals: { error_type: :error }
+    render "shared/ai_error_page", locals: { error_type: :error }, status: :unprocessable_entity
   end
 
   def show
